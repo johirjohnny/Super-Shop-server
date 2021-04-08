@@ -61,6 +61,18 @@ client.connect(err => {
                 res.send(documents);
             })
     })
+
+    app.delete("/delete/:id", (req, res) => {
+        const id = ObjectId(req.params.id);
+        console.log("deleted id", id);
+        bookings.findOneAndDelete({ _id: id })
+            .then(result => {
+                console.log(result);
+
+                res.send(result.deletedCount > 0);
+
+            })
+    })
 });
 
 
@@ -71,16 +83,6 @@ app.get('/', (req, res) => {
 })
 
 
-app.delete("/delete/:id", (req, res) => {
-    const id = ObjectId(req.params.id);
-    console.log("deleted id", id);
-    bookings.findOneAndDelete({ _id: id })
-        .then(result => {
-            console.log(result);
 
-            res.send(result.deletedCount > 0);
 
-        })
-})
-
-app.listen(port)
+app.listen(process.env.PORT || port)
